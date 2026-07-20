@@ -1,21 +1,39 @@
-
 version: 2
 
 models:
-    - name: my_first_dbt_model
-      description: "A starter dbt model"
-      columns:
-          - name: id
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
+  - name: stg_customers
+    columns:
+      - name: CUSTOMER_ID
+        data_tests:
+          - unique
+          - not_null
 
-    - name: my_second_dbt_model
-      description: "A starter dbt model"
-      columns:
-          - name: id
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
+  - name: stg_products
+    columns:
+      - name: PRODUCT_ID
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_orders
+    columns:
+      - name: ORDER_ID
+        data_tests:
+          - unique
+          - not_null
+
+      - name: CUSTOMER_ID
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: CUSTOMER_ID
+
+      - name: PRODUCT_ID
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: PRODUCT_ID
